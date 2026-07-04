@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated/processed data — regenerate via prepare_import.py
+data/processed/*.csv
