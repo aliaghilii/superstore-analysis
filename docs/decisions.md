@@ -72,3 +72,22 @@ Decision: Do not resolve now. Documented here for traceability;
 disposition (keep, remove, or flag) deferred to Phase 4 (Data
 Cleaning), consistent with the roadmap's separation of Discovery
 (Phase 3) from remediation (Phase 4).
+
+## Decision 004 — Same Day shipping duration anomaly (12 orders)
+
+Finding: Of 264 orders with ship_mode = 'Same Day', 252 (95.5%) show
+0 days between order_date and ship_date as expected. 12 orders (4.5%)
+show a 1-day gap instead.
+
+Cross-check: General hypothesis that shipping duration scales with
+ship_mode was confirmed (First Class ~2.2 days avg, Second Class
+~3.2 days, Standard Class ~5.0 days) — this anomaly is isolated to a
+minority of Same Day orders, not a systemic labeling issue.
+
+Limitation: Dataset only records dates, not timestamps. Cannot verify
+whether these 12 orders were placed late at night and processed on
+the next calendar day (a legitimate business edge case) versus a
+genuine data entry error. Insufficient granularity to resolve.
+
+Decision: Documented, not resolved. Disposition deferred to Phase 4.
+Query: `database/queries/data_quality_checks.sql`
