@@ -13,7 +13,6 @@ import pandas as pd
 
 # Path to the raw source file
 df = pd.read_csv("C:/Users/Ali Aghili/Desktop/superstore-analysis/data/raw/Sample - Superstore.csv", encoding='cp1252')
-
 # ============================================
 # Table 1: customers
 # Only stable, verified customer-level attributes
@@ -36,6 +35,11 @@ print(f"customers: {len(customers)} rows")
 # ============================================
 # Table 2: products
 # ============================================
+# Identify product_ids with more than one distinct name in the RAW data
+# (must be computed BEFORE drop_duplicates, since dedup would hide this)
+name_check = df.groupby('Product ID')['Product Name'].nunique()
+conflict_ids = set(name_check[name_check > 1].index)
+
 products = df[[
     'Product ID',
     'Category',
@@ -50,8 +54,11 @@ products.columns = [
     'product_name'
 ]
 
-products.to_csv("C:/Users/Ali Aghili/Desktop/superstore-analysis/data/processed/products.csv", index=False)
-print(f"products: {len(products)} rows")
+# Flag products whose ID mapped to more than one name in raw data
+products['name_conflict'] = products['product_id'].isin(conflict_ids)
+
+products.to_csv("C:/Users/Ali Aghili/Desktop/superstore-analysis/data/processed/products.csv" ,index=False)
+print(f"products: {len(products)} rows, {products['name_conflict'].sum()} flagged as name_conflict")
 
 # ============================================
 # Table 3: orders
@@ -115,3 +122,4 @@ order_items.to_csv("C:/Users/Ali Aghili/Desktop/superstore-analysis/data/process
 print(f"order_items: {len(order_items)} rows")
 
 print("\nAll files prepared successfully.")
+

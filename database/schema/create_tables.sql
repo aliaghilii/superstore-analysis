@@ -32,8 +32,10 @@ CREATE TABLE products (
     product_id      VARCHAR(20)     PRIMARY KEY,
     category        VARCHAR(50)     NOT NULL,
     sub_category    VARCHAR(50)     NOT NULL,
-    product_name    VARCHAR(200)    NOT NULL
+    product_name    VARCHAR(200)    NOT NULL,
+	name_conflict	BOOLEAN		    NOT NULL DEFAULT FALSE
 );
+
 
 -- ============================================
 -- Table 3: orders

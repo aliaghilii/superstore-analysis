@@ -15,9 +15,7 @@ FROM 'C:\Users\Public\superstore\customers.csv'
 DELIMITER ',' CSV HEADER;
 
 -- PRODUCTS TABLE
-COPY products(
-    product_id, category, sub_category, product_name
-)
+COPY products(product_id, category, sub_category, product_name, name_conflict)
 FROM 'C:\Users\Public\superstore\products.csv'
 DELIMITER ',' CSV HEADER;
 
@@ -42,8 +40,14 @@ SELECT COUNT(*) FROM customers;
 SELECT COUNT(*) FROM products;
 SELECT COUNT(*) FROM orders;
 SELECT COUNT(*) FROM order_items;
-
+--tests
 SELECT o.ship_region, COUNT(*) 
 FROM order_items oi
 JOIN orders o ON oi.order_id = o.order_id
 GROUP BY o.ship_region;
+
+SELECT COUNT(*) FROM products WHERE name_conflict = TRUE;
+SELECT product_id, product_name, name_conflict 
+FROM products 
+WHERE name_conflict = TRUE 
+;
