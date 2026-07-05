@@ -1,4 +1,11 @@
 # Data Dictionary — Superstore Analysis
+## Data Source
+This dataset is a copy of the widely-distributed "Sample Superstore" 
+dataset originally published by Tableau for training purposes. No 
+formal license was located for this specific dataset variant; it is 
+included here for portfolio/educational reproducibility, consistent 
+with its common distribution across public Kaggle mirrors and GitHub 
+repositories.
 
 ## Dataset Overview
 
