@@ -44,13 +44,20 @@ Unique product records.
 | category | VARCHAR(50) | Furniture, Office Supplies, Technology |
 | sub_category | VARCHAR(50) | 17 sub-categories |
 | product_name | VARCHAR(200) | Full product name |
+| name_conflict | BOOLEAN | TRUE if this product_id mapped to more than one distinct product_name in the raw source data (see Data Quality Note below) |
 
-**Row count:** 1,862
+**Row count:** 1,862 (32 flagged as name_conflict = TRUE)
 
 **Data Quality Note:** 1,862 unique Product IDs exist against only 1,850
-unique Product Names — 32 Product IDs appear with more than one name.
-Root cause not yet investigated; flagged for the Data Quality phase, not
-resolved in this schema.
+unique Product Names in the raw dataset — 32 Product IDs (1.7%) map to
+two distinct, often unrelated product names (e.g. a chair ID paired with
+a wall clock name). Root cause unconfirmed (hypothesis: sequence-number
+collision within the same sub-category in the source dataset, not a
+data-entry typo — pattern-based inference, not verified against an
+official source). Rather than silently discarding one name during
+deduplication, affected rows are flagged via `name_conflict = TRUE` so
+downstream analysis can filter them out or treat their names as
+low-confidence. Full list: `docs/data_quality/product_id_name_conflicts.csv`.
 
 ---
 
