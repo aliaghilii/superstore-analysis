@@ -31,7 +31,7 @@ FROM order_items
 GROUP BY order_id
 HAVING COUNT(DISTINCT customer_id) > 1;
 
--- 2.Duplicate Records
+-- 2. Duplicate Records
 -- Check 1: Duplicate row_id (tautological — guaranteed by PRIMARY KEY,
 -- kept here only for completeness of the audit trail)
 SELECT row_id, COUNT(*)
@@ -48,3 +48,44 @@ SELECT order_id, customer_id, product_id, sales, quantity, discount, profit, COU
 FROM order_items
 GROUP BY order_id, customer_id, product_id, sales, quantity, discount, profit
 HAVING COUNT(*) > 1;
+
+
+-- 3. Business Rule Validity Checks
+-- Rule 1: Ship date must never be before order date.
+-- Cross-check: previously verified via pandas on raw data (0 violations).
+-- This SQL version re-verifies on the actual imported `orders` table,
+-- confirming no discrepancy was introduced during import.
+SELECT order_id, order_date, ship_date
+FROM orders
+WHERE ship_date < order_date;
+
+-- Rule 2: Discount must be between 0 and 1 (0% to 100%).
+SELECT COUNT(*) AS invalid_discount
+FROM order_items
+WHERE discount < 0 OR discount > 1;
+
+-- Rule 3: Quantity must be positive (zero or negative makes no business sense).
+SELECT COUNT(*) AS invalid_quantity
+FROM order_items
+WHERE quantity <= 0;
+
+-- Rule 4: Sales must be positive (unlike Profit, which can legitimately be negative).
+SELECT COUNT(*) AS invalid_sales
+FROM order_items
+WHERE sales <= 0;
+
+-- Business rule (hypothesis): shipping duration should correlate with ship_mode
+SELECT ship_mode,
+       MIN(ship_date - order_date) AS min_days,
+       MAX(ship_date - order_date) AS max_days,
+       AVG(ship_date - order_date) AS avg_days
+FROM orders
+GROUP BY ship_mode
+ORDER BY avg_days;
+
+-- Business rule: Same Day orders should have 0 days between order_date and ship_date.
+-- Finding: 12 of 264 (4.5%) Same Day orders show a 1-day gap instead.
+SELECT order_id, order_date, ship_date, ship_mode
+FROM orders
+WHERE ship_mode = 'Same Day' AND ship_date <> order_date;
+
