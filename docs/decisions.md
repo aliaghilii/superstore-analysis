@@ -73,6 +73,12 @@ disposition (keep, remove, or flag) deferred to Phase 4 (Data
 Cleaning), consistent with the roadmap's separation of Discovery
 (Phase 3) from remediation (Phase 4).
 
+-UPDATE (Phase 4 resolution)
+Action taken: Deleted Row ID 3406 (exact duplicate of Row ID 3407).
+Result: order_items reduced from 9,994 to 9,993 rows.
+Validation: duplicate check query returned 0 rows after deletion.
+Script: database/schema/clean_data.sql
+
 ## Decision 004 — Same Day shipping duration anomaly (12 orders)
 
 Finding: Of 264 orders with ship_mode = 'Same Day', 252 (95.5%) show
