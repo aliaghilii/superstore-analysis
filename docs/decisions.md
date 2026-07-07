@@ -91,3 +91,28 @@ genuine data entry error. Insufficient granularity to resolve.
 
 Decision: Documented, not resolved. Disposition deferred to Phase 4.
 Query: `database/queries/data_quality_checks.sql`
+
+## Decision 005 — Outlier detection concluded: no data errors found
+
+Method: Per-category IQR (1.5×IQR) applied separately to Sales and 
+Profit, since raw skewness (Sales=12.97, Profit=7.56) made whole-
+dataset IQR unreliable. Discount excluded from IQR analysis — value 
+counts showed only 12 discrete policy-driven levels (0%, 10%, 20%...), 
+not a continuous variable.
+
+Findings:
+- Profit "outliers" (13-19% per category): strongly explained by 
+  Discount > 30%, which correlates with negative profit 97.77% of 
+  the time. This is a real business pattern, not a data error — 
+  directly relevant to business question D2 (discount/profit 
+  threshold). No cleaning action needed.
+- Sales "outliers" (7.7-13.5% per category): driven primarily by 
+  higher unit price (ratio 3.78x-13.63x across categories), not 
+  bulk quantity (ratio only 1.29x-1.74x) — hypothesis about bulk 
+  purchases was largely incorrect. Sanity-checked against the 
+  single highest sale ($22,638.48, Cisco TelePresence System, 
+  qty=6) — a plausible legitimate B2B transaction, not an error.
+
+Conclusion: No row-level removal recommended for Sales/Profit 
+outliers in Phase 4. These represent genuine business variation, 
+not data quality issues.
