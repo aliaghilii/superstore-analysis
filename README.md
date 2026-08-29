@@ -68,7 +68,7 @@ Interactive Power BI dashboard with 4 pages:
 4. Geographic Analysis — regional and state-level sales/profit
 
 Screenshots: [`dashboard/screenshots/`](dashboard/screenshots/)  
-File: [`dashboard/superstore_dashboard.pbix`](dashboard/superstore_dashboard.pbix)
+File: [`dashboard/superstore_dashboard.pbix`](dashboard/superstore.pbix)
 
 ## Key Findings (highlights)
 
