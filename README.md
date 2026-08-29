@@ -80,14 +80,16 @@ File: [`dashboard/superstore_dashboard.pbix`](dashboard/superstore.pbix)
 - A single root cause (80% discount on two sub-categories) explains 78% 
   of Texas's total loss.
 
-Full list: see `docs/analytical_findings.md` and `docs/recommendations.md`.
+Full list: see [`docs/analytical_findings.md`](docs/analytical_findings.md).
+ and [`docs/recommendations.md`](docs/recommendations.md).
 
 ## Data Quality Notes
 
 This dataset appears to have some synthetic/training-data characteristics 
 (e.g. 32 Product IDs map to conflicting names; Profit follows an 
 unusually structured discount-based pattern). These are disclosed as 
-limitations in `docs/business_summary.md`.
+limitations in [`docs/business_summary.md`](docs/business_summary.md).
+
 
 ## How to Reproduce
 
